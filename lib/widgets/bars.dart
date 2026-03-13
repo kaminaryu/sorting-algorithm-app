@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BarsContainer extends StatefulWidget {
-    const BarsContainer(this.barsCount, {super.key});
+    const BarsContainer(this.bars, {super.key});
 
-    final int barsCount;
+    final List<double> bars;
 
     @override
     State<BarsContainer> createState() => _BarsContainerState();
@@ -17,11 +17,10 @@ class _BarsContainerState extends State<BarsContainer> {
     @override
     Widget build(BuildContext context) {
         // generate bars
-        final List<double> bars = List.generate(widget.barsCount, (i) => (i+1).toDouble());
-        final double maxValue = bars.reduce((x, y) => x > y ? x : y);
+        final double maxValue = widget.bars.reduce((x, y) => x > y ? x : y);
 
         // calculate bar heights
-        List<double> barHeightsPercentage = bars.map((value) => value / maxValue).toList();
+        List<double> barHeightsPercentage = widget.bars.map((value) => value / maxValue).toList();
         List<double> barHeights = barHeightsPercentage.map((perc) => (containerHeight - topPadding) * perc).toList();
 
         return Container(

@@ -10,8 +10,8 @@ const List<String> sortingAlgorithms = [
 class SortingOptions extends StatefulWidget {
     final TextEditingController barCountCtrl;
     final String? selectedAlgorithm;
-    final ValueChanged onSelectedAlgorithmChange;
-    final VoidCallback onBarCountChange;
+    final ValueChanged<String?> onSelectedAlgorithmChange; // like void function(String?)
+    final VoidCallback onBarCountChange; // like void function()
 
     const SortingOptions({
         required this.barCountCtrl,

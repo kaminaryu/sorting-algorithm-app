@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'widgets/bars.dart';
 import 'widgets/form.dart';
+import 'widgets/controls.dart';
 
 void main(List<String> arguments) {
     runApp(const MainApp());
@@ -26,9 +27,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+    final int _defaultBarCount = 67;
+    final _barCountCtrl = TextEditingController(text: "67");
+    late List<double> bars = List.generate(_defaultBarCount, (i) => (i+1).toDouble());
     String? selectedAlgorithm;
 
-    final _barCountCtrl = TextEditingController(text: "67");
+
+    void _generateBars() {
+        setState(() {
+            int barsCount = int.tryParse(_barCountCtrl.text) ?? _defaultBarCount;
+
+            // limit cuz the shit might kill itself
+            if (barsCount <= 0 || barsCount >= 5000) barsCount = _defaultBarCount;
+
+            // generate the bars
+            bars = List.generate(barsCount, (i) => (i+1).toDouble());
+        });
+    }
+
+    void _shuffleBars() {
+        setState(() {
+            bars.shuffle();
+        });
+    }
 
     @override
     void dispose() {
@@ -38,10 +59,6 @@ class _HomeState extends State<Home> {
 
     @override
     Widget build(BuildContext context) {
-        int barCount = int.tryParse(_barCountCtrl.text) ?? 67;
-
-        // limit cuz the shit might kill itself
-        if (barCount <= 0 || barCount >= 5000) barCount = 67;
 
         return Scaffold(
             appBar: AppBar(
@@ -54,13 +71,16 @@ class _HomeState extends State<Home> {
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                    BarsContainer(barCount), 
+                    BarsContainer(bars), 
                     SortingOptions(
                         barCountCtrl: _barCountCtrl,
                         selectedAlgorithm: selectedAlgorithm,
                         onSelectedAlgorithmChange: (alg) => setState(() => selectedAlgorithm = alg),
-                        onBarCountChange: () => setState(() => {}), // trigger rebuild
-                    )
+                        onBarCountChange: () => _generateBars(), // trigger rebuild
+                    ),
+                    Controls(
+                        onClick: () => _shuffleBars(),
+                    ),
                 ],
             ),
         );
