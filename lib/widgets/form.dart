@@ -9,15 +9,19 @@ const List<String> sortingAlgorithms = [
 
 class SortingOptions extends StatefulWidget {
     final TextEditingController barCountCtrl;
+    final TextEditingController delayCtrl;
     final String? selectedAlgorithm;
     final ValueChanged<String?> onSelectedAlgorithmChange; // like void function(String?)
     final VoidCallback onBarCountChange; // like void function()
+    final VoidCallback onDelayChange; // like void function()
 
     const SortingOptions({
         required this.barCountCtrl,
+        required this.delayCtrl,
         required this.selectedAlgorithm,
         required this.onSelectedAlgorithmChange,
         required this.onBarCountChange,
+        required this.onDelayChange,
         super.key,
     });
 
@@ -62,6 +66,13 @@ class _SortingOptionsState extends State<SortingOptions> {
                         keyboardType: TextInputType.numberWithOptions(),
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         decoration: InputDecoration(labelText: "Number of Items"),
+                        onChanged: (_) => widget.onBarCountChange(),
+                    ),
+                    TextField(
+                        controller: widget.delayCtrl,
+                        keyboardType: TextInputType.numberWithOptions(),
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        decoration: InputDecoration(labelText: "Delay Between Comparison (ms)"),
                         onChanged: (_) => widget.onBarCountChange(),
                     ),
                 ],
