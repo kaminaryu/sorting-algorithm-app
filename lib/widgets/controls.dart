@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Controls extends StatelessWidget {
-    final VoidCallback onClick;
+    final VoidCallback onShuffleClick;
+    final VoidCallback onStartClick;
+    final VoidCallback onPauseClick;
 
     const Controls({
-        required this.onClick,
+        required this.onShuffleClick,
+        required this.onStartClick,
+        required this.onPauseClick,
         super.key
     });
 
@@ -15,8 +19,17 @@ class Controls extends StatelessWidget {
             child: Row(
                 children: [
                     ElevatedButton(
-                    onPressed: onClick, // () => onClick() also works
-                    child: Text("Shuffle"))
+                        onPressed: onShuffleClick, // () => onClick() also works
+                        child: Text("Shuffle")
+                    ),
+                    ElevatedButton(
+                        onPressed: onStartClick,
+                        child: Text("Start")
+                    ),
+                    ElevatedButton(
+                        onPressed: () => {},
+                        child: Text("Pause")
+                    ),
                 ],
             ),
         );

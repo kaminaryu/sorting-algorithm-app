@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sorting_algorithm/algorithms/bubble.dart';
 
 import 'widgets/bars.dart';
 import 'widgets/form.dart';
@@ -51,6 +52,16 @@ class _HomeState extends State<Home> {
         });
     }
 
+    void _runAlgorithm() async {
+        await for (final state in bubbleSort(bars)) {
+            setState(() => bars = state);
+        }
+    }
+
+    void _pauseAlgorithm() {
+        
+    }
+
     @override
     void dispose() {
         _barCountCtrl.dispose();
@@ -76,10 +87,13 @@ class _HomeState extends State<Home> {
                         barCountCtrl: _barCountCtrl,
                         selectedAlgorithm: selectedAlgorithm,
                         onSelectedAlgorithmChange: (alg) => setState(() => selectedAlgorithm = alg),
-                        onBarCountChange: () => _generateBars(), // trigger rebuild
+                        onBarCountChange: () => _generateBars(),
+
                     ),
                     Controls(
-                        onClick: () => _shuffleBars(),
+                        onShuffleClick: () => _shuffleBars(),
+                        onStartClick: () => _runAlgorithm(),
+                        onPauseClick: () => _pauseAlgorithm(),
                     ),
                 ],
             ),
