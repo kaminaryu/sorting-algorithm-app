@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // text formatting
 
-const List<String> sortingAlgorithms = [
-    "Bubble",
-    "Selection",
-    "Insertion",
-];
+import '../data/algorithm_list.dart';
 
 class SortingOptions extends StatefulWidget {
     final TextEditingController barCountCtrl;
@@ -30,6 +26,8 @@ class SortingOptions extends StatefulWidget {
 }
 
 class _SortingOptionsState extends State<SortingOptions> {
+    final _sortingAlgorithms = sortingAlgorithmsFunctions.keys;
+
     @override
     Widget build(BuildContext context) {
         return Container(
@@ -51,7 +49,7 @@ class _SortingOptionsState extends State<SortingOptions> {
                         decoration: InputDecoration(
                             labelText: "Choose a sorting algorithm"
                         ),
-                        items: sortingAlgorithms.map(
+                        items: _sortingAlgorithms.map(
                             (opt) => DropdownMenuItem(
                                 value: opt,
                                 child: Text(opt),

@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:sorting_algorithm/algorithms/bubble.dart';
 
 import 'widgets/bars.dart';
 import 'widgets/form.dart';
 import 'widgets/controls.dart';
+
+import 'data/algorithm_list.dart';
 
 void main(List<String> arguments) {
     runApp(const MainApp());
@@ -65,7 +66,13 @@ class _HomeState extends State<Home> {
         _resumeAlgorithm();
 
         final delay = int.tryParse(_delayCtrl.text) ?? 5;
-        _visualSub = bubbleSort(bars, delay).listen(
+
+        // get the sorting algorithm function of the list of algs
+        final algFunc = sortingAlgorithmsFunctions[selectedAlgorithm];
+
+        if (algFunc == null) return;
+
+        _visualSub = algFunc(bars, delay).listen(
             (state) {
                 setState(() {
                     bars = state;
@@ -123,29 +130,31 @@ class _HomeState extends State<Home> {
                 ),
                 backgroundColor: Colors.grey,
             ),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                    BarsContainer(bars), 
-                    SortingOptions(
-                        barCountCtrl: _barCountCtrl,
-                        delayCtrl: _delayCtrl,
-                        selectedAlgorithm: selectedAlgorithm,
-                        onSelectedAlgorithmChange: (alg) => setState(() => selectedAlgorithm = alg),
-                        onBarCountChange: () => _generateBars(),
-                        onDelayChange: () => setState(() {}),
-                    ),
-                    Controls(
-                        isPaused: _isPaused,
-                        isSorting: _isSorting,
-                        isShuffled: _isShuffled,
-                        onShuffleClick: () => _shuffleBars(),
-                        onStartClick: () => _runAlgorithm(),
-                        onPauseClick: () => _pauseAlgorithm(),
-                        onResumeClick: () => _resumeAlgorithm(),
-                        onStopClick: () => _stopAlgorithm(),
-                    ),
-                ],
+            body: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                        BarsContainer(bars), 
+                        SortingOptions(
+                            barCountCtrl: _barCountCtrl,
+                            delayCtrl: _delayCtrl,
+                            selectedAlgorithm: selectedAlgorithm,
+                            onSelectedAlgorithmChange: (alg) => setState(() => selectedAlgorithm = alg),
+                            onBarCountChange: () => _generateBars(),
+                            onDelayChange: () => setState(() {}),
+                        ),
+                        Controls(
+                            isPaused: _isPaused,
+                            isSorting: _isSorting,
+                            isShuffled: _isShuffled,
+                            onShuffleClick: () => _shuffleBars(),
+                            onStartClick: () => _runAlgorithm(),
+                            onPauseClick: () => _pauseAlgorithm(),
+                            onResumeClick: () => _resumeAlgorithm(),
+                            onStopClick: () => _stopAlgorithm(),
+                        ),
+                    ],
+                ),
             ),
         );
     }
