@@ -33,10 +33,14 @@ class _HomeState extends State<Home> {
     final int _defaultBarCount = 67;
     final _barCountCtrl = TextEditingController(text: "67");
     final _delayCtrl = TextEditingController(text: "5");
+    String? selectedAlgorithm = "Bubble";
+
     late List<double> bars = List.generate(_defaultBarCount, (i) => (i+1).toDouble());
-    String? selectedAlgorithm;
 
     StreamSubscription<List<double>>? _visualSub;
+    bool _isSorting = false;
+    bool _isPaused = false;
+    bool _isShuffled = false;
 
     void _generateBars() {
         setState(() {
@@ -51,17 +55,32 @@ class _HomeState extends State<Home> {
     }
 
     void _shuffleBars() {
-        _visualSub?.cancel();
         setState(() {
             bars.shuffle();
+            _isShuffled = true;
         });
     }
 
     void _runAlgorithm() async {
+        _resumeAlgorithm();
+
         final delay = int.tryParse(_delayCtrl.text) ?? 5;
-        _visualSub = bubbleSort(bars, delay).listen((state) {
-            setState(() => bars = state);
-        });
+        _visualSub = bubbleSort(bars, delay).listen(
+            (state) {
+                setState(() {
+                    bars = state;
+                    _isSorting = true;
+                });
+            },
+            onDone: () => setState(() {
+                _isSorting = false;
+                _isShuffled = false;
+            }),
+            onError: (_) => setState(() {
+                _isSorting = false;
+                _isShuffled = false;
+            }),
+        );
         // await for (final state in bubbleSort(bars, delay)) {
         //     setState(() => bars = state);
         // }
@@ -69,12 +88,21 @@ class _HomeState extends State<Home> {
 
     void _pauseAlgorithm() {
         _visualSub?.pause();
-        print("Paued");
+        setState(() => _isPaused = true);
     }
 
     void _resumeAlgorithm() {
         _visualSub?.resume();
-        print("Resume");
+        setState(() => _isPaused = false);
+    }
+
+    void _stopAlgorithm() {
+        _visualSub?.cancel();
+        setState(() {
+            _isSorting = false;
+            _isShuffled = false;
+            _generateBars(); // regenerate the bars
+        });
     }
 
     @override
@@ -108,10 +136,14 @@ class _HomeState extends State<Home> {
                         onDelayChange: () => setState(() {}),
                     ),
                     Controls(
+                        isPaused: _isPaused,
+                        isSorting: _isSorting,
+                        isShuffled: _isShuffled,
                         onShuffleClick: () => _shuffleBars(),
                         onStartClick: () => _runAlgorithm(),
                         onPauseClick: () => _pauseAlgorithm(),
                         onResumeClick: () => _resumeAlgorithm(),
+                        onStopClick: () => _stopAlgorithm(),
                     ),
                 ],
             ),

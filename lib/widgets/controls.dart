@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
 class Controls extends StatefulWidget {
+    final bool isPaused;
+    final bool isSorting;
+    final bool isShuffled;
     final VoidCallback onShuffleClick;
     final VoidCallback onStartClick;
     final VoidCallback onPauseClick;
     final VoidCallback onResumeClick;
+    final VoidCallback onStopClick;
 
+    // no way this is optimal cuh
     const Controls({
+        required this.isPaused,
+        required this.isSorting,
+        required this.isShuffled,
         required this.onShuffleClick,
         required this.onStartClick,
         required this.onPauseClick,
         required this.onResumeClick,
+        required this.onStopClick,
         super.key
     });
 
@@ -19,8 +28,6 @@ class Controls extends StatefulWidget {
 }
 
 class _ControlsState extends State<Controls> {
-    bool paused = false;
-
     @override
     Widget build(BuildContext context) {
         return Container(
@@ -28,24 +35,31 @@ class _ControlsState extends State<Controls> {
             child: Row(
                 children: [
                     ElevatedButton(
-                        onPressed: widget.onShuffleClick, // () => onClick() also works
+                        onPressed: widget.isSorting ? null : widget.onShuffleClick, // () => onClick() also works
                         child: Text("Shuffle")
                     ),
                     ElevatedButton(
-                        onPressed: widget.onStartClick,
-                        child: Text("Start")
+                        // onPressed: widget.onStartClick,
+                        onPressed: !widget.isShuffled ? null : () => setState(() {
+                            if (widget.isSorting) {
+                                widget.onStopClick();
+                            }
+                            else {
+                                widget.onStartClick();
+                            }
+                        }),
+                        child: Text(widget.isSorting ? "Stop" : "Start"),
                     ),
                     ElevatedButton(
                         onPressed: () => setState(() {
-                            if (paused) {
+                            if (widget.isPaused) {
                                 widget.onResumeClick();
                             }
                             else {
                                 widget.onPauseClick();
                             }
-                            paused = !paused;
                         }),
-                        child: Text(paused ? "Resume" : "Pause")
+                        child: Text(widget.isPaused ? "Resume" : "Pause")
                     ),
                 ],
             ),
