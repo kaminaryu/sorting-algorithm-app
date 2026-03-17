@@ -11,7 +11,7 @@ Stream<List<double>> insertionSort(List<double> bars, int delay) async* {
             else {
                 continue;
             }
-            await Future.delayed(Duration(milliseconds: delay));
+            await Future.delayed(Duration(microseconds: delay));
         }
     }
 }

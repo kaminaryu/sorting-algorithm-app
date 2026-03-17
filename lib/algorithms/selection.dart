@@ -6,7 +6,7 @@ Stream<List<double>> selectionSort(List<double> bars, int delay) async* {
             if (list[j] < list[min]) {
                 min = j;
             }
-            await Future.delayed(Duration(milliseconds: delay));
+            await Future.delayed(Duration(microseconds: delay));
         }
         final temp = list[i];
         list[i] = list[min];

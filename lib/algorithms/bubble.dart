@@ -8,7 +8,7 @@ Stream<List<double>> bubbleSort(List<double> bars, int delay) async* {
                 list[j + 1] = temp;
                 yield [...list];
             }
-            await Future.delayed(Duration(milliseconds: delay));
+            await Future.delayed(Duration(microseconds: delay));
         }
     }
 }

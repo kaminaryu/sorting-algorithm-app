@@ -70,7 +70,7 @@ class _SortingOptionsState extends State<SortingOptions> {
                         controller: widget.delayCtrl,
                         keyboardType: TextInputType.numberWithOptions(),
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        decoration: InputDecoration(labelText: "Delay Between Comparison (ms)"),
+                        decoration: InputDecoration(labelText: "Delay Between Comparison (μs)"),
                         onChanged: (_) => widget.onBarCountChange(),
                     ),
                 ],
