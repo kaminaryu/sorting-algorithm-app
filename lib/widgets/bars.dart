@@ -1,5 +1,32 @@
 import 'package:flutter/material.dart';
 
+
+class BarsCanvas extends CustomPainter {
+    final List<double> bars;
+    BarsCanvas({required this.bars}); // no super.key cuz it aint a widget
+
+    @override
+    void paint(Canvas canvas, Size size) {
+        final paint = Paint()..color = Color(0xff670067);
+
+        final horizontalPadding = 25;
+        final canvasWidth = size.width - horizontalPadding;
+        final canvasHeight = size.height;
+
+        final barWidth = canvasWidth / bars.length;
+
+        for (int i = 0; i < bars.length; i++) {
+            final x = horizontalPadding / 2 + i * barWidth;
+
+            canvas.drawRect(Rect.fromLTWH(x, canvasHeight, barWidth, -bars[i]), paint);
+        }
+    }
+
+    @override
+    bool shouldRepaint(BarsCanvas old) => old.bars != bars;
+}
+
+
 class BarsContainer extends StatefulWidget {
     const BarsContainer(this.bars, {super.key});
 
@@ -27,7 +54,6 @@ class _BarsContainerState extends State<BarsContainer> {
             width: containerWidth,
             height: containerHeight,
             margin: EdgeInsets.all(32),
-            padding: EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
                 border: Border.all(
                     color: Colors.black,
@@ -36,24 +62,31 @@ class _BarsContainerState extends State<BarsContainer> {
                 borderRadius: BorderRadius.circular(20),
                 color: Color(0xFFdedede),
             ),
-            child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: barHeights.map((bar) => Expanded(
-                    child: Container(
-                        height: bar,
-                        margin: EdgeInsets.symmetric(horizontal: 0),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                            ),
-                        ),
-                    )
-                )).toList(),
+            child: CustomPaint(
+                size: Size(double.infinity, double.infinity),
+                painter: BarsCanvas(bars: barHeights),
             ),
         );
     }
 }
+//             child: Row(
+//                 mainAxisSize: MainAxisSize.max,
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 crossAxisAlignment: CrossAxisAlignment.end,
+//                 children: barHeights.map((bar) => Expanded(
+//                     child: Container(
+//                         height: bar,
+//                         margin: EdgeInsets.symmetric(horizontal: 0),
+//                         decoration: BoxDecoration(
+//                             color: Colors.white,
+//                             border: Border.all(
+//                                 color: Colors.black,
+//                                 width: 1,
+//                             ),
+//                         ),
+//                     )
+//                 )).toList(),
+//             ),
+//         );
+//     }
+// }

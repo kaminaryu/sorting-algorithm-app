@@ -49,8 +49,7 @@ class _HomeState extends State<Home> {
             int barsCount = int.tryParse(_barCountCtrl.text) ?? _defaultBarCount;
 
             // limit cuz the shit might kill itself
-            // if (barsCount <= 0 || barsCount >= 5000) barsCount = _defaultBarCount;
-            barsCount = min(barsCount, 5000);
+            barsCount = min(barsCount, 100000);
             barsCount = max(1, barsCount);
 
             // generate the bars
@@ -91,9 +90,6 @@ class _HomeState extends State<Home> {
                 _isShuffled = false;
             }),
         );
-        // await for (final state in bubbleSort(bars, delay)) {
-        //     setState(() => bars = state);
-        // }
     }
 
     void _pauseAlgorithm() {
@@ -124,7 +120,6 @@ class _HomeState extends State<Home> {
 
     @override
     Widget build(BuildContext context) {
-
         return Scaffold(
             appBar: AppBar(
                 title: Align(
@@ -138,6 +133,7 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                         BarsContainer(bars), 
+
                         SortingOptions(
                             barCountCtrl: _barCountCtrl,
                             delayCtrl: _delayCtrl,
@@ -146,6 +142,7 @@ class _HomeState extends State<Home> {
                             onBarCountChange: () => _generateBars(),
                             onDelayChange: () => setState(() {}),
                         ),
+
                         Controls(
                             isPaused: _isPaused,
                             isSorting: _isSorting,
