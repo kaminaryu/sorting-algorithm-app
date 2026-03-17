@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import 'widgets/bars.dart';
 import 'widgets/form.dart';
@@ -36,6 +36,7 @@ class _HomeState extends State<Home> {
     final _delayCtrl = TextEditingController(text: "5");
     String? selectedAlgorithm = "Bubble";
 
+    // gen default bars
     late List<double> bars = List.generate(_defaultBarCount, (i) => (i+1).toDouble());
 
     StreamSubscription<List<double>>? _visualSub;
@@ -48,7 +49,9 @@ class _HomeState extends State<Home> {
             int barsCount = int.tryParse(_barCountCtrl.text) ?? _defaultBarCount;
 
             // limit cuz the shit might kill itself
-            if (barsCount <= 0 || barsCount >= 5000) barsCount = _defaultBarCount;
+            // if (barsCount <= 0 || barsCount >= 5000) barsCount = _defaultBarCount;
+            barsCount = min(barsCount, 5000);
+            barsCount = max(1, barsCount);
 
             // generate the bars
             bars = List.generate(barsCount, (i) => (i+1).toDouble());

@@ -45,7 +45,7 @@ class _BarsContainerState extends State<BarsContainer> {
                         height: bar,
                         margin: EdgeInsets.symmetric(horizontal: 0),
                         decoration: BoxDecoration(
-                            color: Colors.purple,
+                            color: Colors.white,
                             border: Border.all(
                                 color: Colors.black,
                                 width: 1,
