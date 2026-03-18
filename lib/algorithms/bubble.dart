@@ -3,7 +3,7 @@ import '../data/theme.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 Stream<List<BarProp>> bubbleSort(List<BarProp> bars, int delay) async* {
-    final audioPlayer = AudioPlayer();
+    // final audioPlayer = AudioPlayer();
  
     // make a local list to manipulate the list
     final localBars = bars.map((bar) => BarProp(value: bar.value)).toList();
