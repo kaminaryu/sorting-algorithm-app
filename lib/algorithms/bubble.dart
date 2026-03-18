@@ -1,8 +1,10 @@
 import '../class/bar_prop.dart';
 import '../data/theme.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 Stream<List<BarProp>> bubbleSort(List<BarProp> bars, int delay) async* {
-    // final list = bars.map((bar) => BarProp(bar.height)).toList();
+    final audioPlayer = AudioPlayer();
+ 
     // make a local list to manipulate the list
     final localBars = bars.map((bar) => BarProp(value: bar.value)).toList();
 
@@ -26,6 +28,9 @@ Stream<List<BarProp>> bubbleSort(List<BarProp> bars, int delay) async* {
                 localBars[j + 1].color = AppTheme.swapping;
                 yield [...localBars];
                 await Future.delayed(Duration(microseconds: delay));
+
+                // await audioPlayer.play(AssetSource("plop.mp3"));
+                // await audioPlayer.stop();
             }
 
             // resetting the bar colors
