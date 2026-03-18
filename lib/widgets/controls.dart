@@ -38,6 +38,9 @@ class _ControlsState extends State<Controls> {
                         onPressed: widget.isSorting ? null : widget.onShuffleClick, // () => onClick() also works
                         child: Text("Shuffle")
                     ),
+
+                    SizedBox(width: 8),
+
                     ElevatedButton(
                         // onPressed: widget.onStartClick,
                         onPressed: !widget.isShuffled ? null : () => setState(() {
@@ -50,6 +53,9 @@ class _ControlsState extends State<Controls> {
                         }),
                         child: Text(widget.isSorting ? "Stop" : "Start"),
                     ),
+
+                    SizedBox(width: 8),
+
                     ElevatedButton(
                         onPressed: () => setState(() {
                             if (widget.isPaused) {
