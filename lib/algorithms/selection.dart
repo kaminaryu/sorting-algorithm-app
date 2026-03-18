@@ -6,9 +6,9 @@ Stream<List<BarProp>> selectionSort(List<BarProp> bars, int delay) async* {
 
     for (int i = 0; i < localBars.length; i++) {
         int min = i;
-        localBars[min].color = AppTheme.special;
 
         for (int j = i; j < localBars.length; j++) {
+            localBars[min].color = AppTheme.special;
             localBars[j].color = AppTheme.comparison;
             yield[...localBars];
             await Future.delayed(Duration(microseconds: delay));
