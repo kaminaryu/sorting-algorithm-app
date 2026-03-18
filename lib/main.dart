@@ -128,6 +128,9 @@ class _HomeState extends State<Home> {
             onDone: () => setState(() {
                 _isSorting = false;
                 _isShuffled = false;
+                for (var bar in bars) {
+                    bar.resetColor();
+                }
             }),
             onError: (_) => setState(() {
                 _isSorting = false;
