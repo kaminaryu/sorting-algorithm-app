@@ -8,6 +8,8 @@ import 'widgets/controls.dart';
 
 import 'data/algorithm_list.dart';
 
+import 'class/bar_prop.dart';
+
 void main(List<String> arguments) {
     runApp(const MainApp());
 }
@@ -31,15 +33,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-    final int _defaultBarCount = 67;
-    final _barCountCtrl = TextEditingController(text: "67");
-    final _delayCtrl = TextEditingController(text: "5");
+    // why static const? so that theyre avaiable when init, since theyre class level
+    static const int _defaultBarCount = 67;
+    static const int _defaultDelay = 1000;
+
+    final _barCountCtrl = TextEditingController(text: _defaultBarCount.toString());
+    final _delayCtrl = TextEditingController(text: _defaultDelay.toString());
     String? selectedAlgorithm = "Bubble";
 
-    // gen default bars
-    late List<double> bars = List.generate(_defaultBarCount, (i) => (i+1).toDouble());
+    late List<BarProp> bars = List.generate(_defaultBarCount, (i) => BarProp(value: (i+1).toDouble()));
 
-    StreamSubscription<List<double>>? _visualSub;
+    StreamSubscription<List<BarProp>>? _visualSub;
     bool _isSorting = false;
     bool _isPaused = false;
     bool _isShuffled = false;
@@ -53,11 +57,11 @@ class _HomeState extends State<Home> {
             barsCount = max(1, barsCount);
 
             // generate the bars
-            bars = List.generate(barsCount, (i) => (i+1).toDouble());
+            bars = List.generate(barsCount, (i) => BarProp(value: (i+1).toDouble()));
         });
     }
 
-    void _shuffleBars() {
+    void _shuffleArray() {
         setState(() {
             bars.shuffle();
             _isShuffled = true;
@@ -70,11 +74,11 @@ class _HomeState extends State<Home> {
         final delay = int.tryParse(_delayCtrl.text) ?? 5;
 
         // get the sorting algorithm function of the list of algs
-        final algFunc = sortingAlgorithmsFunctions[selectedAlgorithm];
+        final sortingFunc = sortingAlgorithmsFunctions[selectedAlgorithm];
 
-        if (algFunc == null) return;
+        if (sortingFunc == null) return;
 
-        _visualSub = algFunc(bars, delay).listen(
+        _visualSub = sortingFunc(bars, delay).listen(
             (state) {
                 setState(() {
                     bars = state;
@@ -147,7 +151,7 @@ class _HomeState extends State<Home> {
                             isPaused: _isPaused,
                             isSorting: _isSorting,
                             isShuffled: _isShuffled,
-                            onShuffleClick: () => _shuffleBars(),
+                            onShuffleClick: () => _shuffleArray(),
                             onStartClick: () => _runAlgorithm(),
                             onPauseClick: () => _pauseAlgorithm(),
                             onResumeClick: () => _resumeAlgorithm(),

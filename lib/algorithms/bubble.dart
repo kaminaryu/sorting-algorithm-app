@@ -1,14 +1,36 @@
-Stream<List<double>> bubbleSort(List<double> bars, int delay) async* {
-    final list = [...bars];
-    for (int i = 0; i < list.length; i++) {
-        for (int j = 0; j < list.length - i - 1; j++) {
-            if (list[j] > list[j + 1]) {
-                final temp = list[j];
-                list[j] = list[j + 1];
-                list[j + 1] = temp;
-                yield [...list];
-            }
+import '../class/bar_prop.dart';
+import '../data/theme.dart';
+
+Stream<List<BarProp>> bubbleSort(List<BarProp> bars, int delay) async* {
+    // final list = bars.map((bar) => BarProp(bar.height)).toList();
+    // make a local list to manipulate the list
+    final localBars = bars.map((bar) => BarProp(value: bar.value)).toList();
+
+    for (int i = 0; i < localBars.length; i++) {
+        for (int j = 0; j < localBars.length - i - 1; j++) {
+            // color for comparing
+            localBars[j].color = AppTheme.comparison;
+            localBars[j + 1].color = AppTheme.comparison;
+
+            yield [...localBars];
             await Future.delayed(Duration(microseconds: delay));
+
+
+            if (localBars[j].value > localBars[j + 1].value) {
+                final temp = localBars[j];
+                localBars[j] = localBars[j + 1];
+                localBars[j + 1] = temp;
+
+                // coloring
+                localBars[j].color = AppTheme.swapping;
+                localBars[j + 1].color = AppTheme.swapping;
+                yield [...localBars];
+                await Future.delayed(Duration(microseconds: delay));
+            }
+
+            // resetting the bar colors
+            localBars[j].color = AppTheme.main;
+            localBars[j + 1].color = AppTheme.main;
         }
     }
 }

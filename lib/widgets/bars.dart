@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
+import '../class/bar_prop.dart';
 
 class BarsCanvas extends CustomPainter {
-    final List<double> bars;
+    final List<BarProp> bars;
     BarsCanvas({required this.bars}); // no super.key cuz it aint a widget
 
     @override
     void paint(Canvas canvas, Size size) {
-        final paint = Paint()..color = Color(0xff670067);
 
         final horizontalPadding = 25;
         final canvasWidth = size.width - horizontalPadding;
@@ -16,9 +17,11 @@ class BarsCanvas extends CustomPainter {
         final barWidth = canvasWidth / bars.length;
 
         for (int i = 0; i < bars.length; i++) {
+            final bar = bars[i];
+            final paint = Paint()..color = bar.color; // Color(0xff670067);
             final x = horizontalPadding / 2 + i * barWidth;
 
-            canvas.drawRect(Rect.fromLTWH(x, canvasHeight, barWidth, -bars[i]), paint);
+            canvas.drawRect(Rect.fromLTWH(x, canvasHeight, barWidth, -bar.height!), paint);
         }
     }
 
@@ -30,7 +33,7 @@ class BarsCanvas extends CustomPainter {
 class BarsContainer extends StatefulWidget {
     const BarsContainer(this.bars, {super.key});
 
-    final List<double> bars;
+    final List<BarProp> bars;
 
     @override
     State<BarsContainer> createState() => _BarsContainerState();
@@ -43,12 +46,17 @@ class _BarsContainerState extends State<BarsContainer> {
 
     @override
     Widget build(BuildContext context) {
-        // generate bars
-        final double maxValue = widget.bars.reduce((x, y) => x > y ? x : y);
+        // get max height
+        double maxHeight = 0;
+        for (int i = 0; i < widget.bars.length; i++) {
+            maxHeight = max(maxHeight, widget.bars[i].value);
+        }
 
         // calculate bar heights
-        List<double> barHeightsPercentage = widget.bars.map((value) => value / maxValue).toList();
-        List<double> barHeights = barHeightsPercentage.map((perc) => (containerHeight - topPadding) * perc).toList();
+        for (int i = 0; i < widget.bars.length; i++) {
+            final double percentage = widget.bars[i].value / maxHeight;
+            widget.bars[i].height = percentage * (containerHeight - topPadding);
+        }
 
         return Container(
             width: containerWidth,
@@ -64,29 +72,8 @@ class _BarsContainerState extends State<BarsContainer> {
             ),
             child: CustomPaint(
                 size: Size(double.infinity, double.infinity),
-                painter: BarsCanvas(bars: barHeights),
+                painter: BarsCanvas(bars: widget.bars),
             ),
         );
     }
 }
-//             child: Row(
-//                 mainAxisSize: MainAxisSize.max,
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 crossAxisAlignment: CrossAxisAlignment.end,
-//                 children: barHeights.map((bar) => Expanded(
-//                     child: Container(
-//                         height: bar,
-//                         margin: EdgeInsets.symmetric(horizontal: 0),
-//                         decoration: BoxDecoration(
-//                             color: Colors.white,
-//                             border: Border.all(
-//                                 color: Colors.black,
-//                                 width: 1,
-//                             ),
-//                         ),
-//                     )
-//                 )).toList(),
-//             ),
-//         );
-//     }
-// }
