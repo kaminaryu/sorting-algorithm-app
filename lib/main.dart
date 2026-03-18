@@ -8,6 +8,8 @@ import 'widgets/controls.dart';
 
 import 'data/algorithm_list.dart';
 
+import 'algorithms/finished.dart';
+
 import 'class/bar_prop.dart';
 
 void main(List<String> arguments) {
@@ -85,10 +87,7 @@ class _HomeState extends State<Home> {
                     _isSorting = true;
                 });
             },
-            onDone: () => setState(() {
-                _isSorting = false;
-                _isShuffled = false;
-            }),
+            onDone: _playFinishedAnim,
             onError: (_) => setState(() {
                 _isSorting = false;
                 _isShuffled = false;
@@ -113,6 +112,29 @@ class _HomeState extends State<Home> {
             _isShuffled = false;
             _generateBars(); // regenerate the bars
         });
+    }
+
+
+    void _playFinishedAnim() {
+        final delay = int.tryParse(_delayCtrl.text) ?? 5;
+
+        _visualSub = finishAnim(bars, delay).listen(
+            (state) {
+                setState(() {
+                    bars = state;
+                    _isSorting = true;
+                });
+            },
+            onDone: () => setState(() {
+                _isSorting = false;
+                _isShuffled = false;
+            }),
+            onError: (_) => setState(() {
+                _isSorting = false;
+                _isShuffled = false;
+            }),
+        );
+
     }
 
     @override
