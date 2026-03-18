@@ -8,6 +8,6 @@ Stream<List<BarProp>> finishAnim(List<BarProp> bars, int delay) async* {
     for (int i = 0; i < localBars.length; i++) {
         localBars[i].color = AppTheme.special;
         yield [...localBars];
-        await Future.delayed(Duration(milliseconds: delay));
+        await Future.delayed(Duration(milliseconds: 1));
     }
 }
