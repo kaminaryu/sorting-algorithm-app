@@ -3,6 +3,7 @@ import '../algorithms/selection.dart';
 import '../algorithms/insertion.dart';
 import '../algorithms/bogo.dart';
 import '../algorithms/merge.dart';
+import '../algorithms/quick.dart';
 
 import '../class/bar_prop.dart';
 
@@ -12,4 +13,5 @@ const Map<String, Stream<List<BarProp>> Function(List<BarProp>, int)> sortingAlg
     "Insertion": insertionSort,
     "Bogo": bogoSort,
     "Merge": mergeSort,
+    "Quick": quickSort,
 };
