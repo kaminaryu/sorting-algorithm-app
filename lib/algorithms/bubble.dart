@@ -1,6 +1,6 @@
 import '../class/bar_prop.dart';
 import '../data/theme.dart';
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
 
 Stream<List<BarProp>> bubbleSort(List<BarProp> bars, int delay) async* {
     // final audioPlayer = AudioPlayer();
