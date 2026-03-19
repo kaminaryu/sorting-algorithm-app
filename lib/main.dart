@@ -65,6 +65,7 @@ class _HomeState extends State<Home> {
 
     void _shuffleArray() {
         setState(() {
+            _generateBars(); // regenerate the bars
             bars.shuffle();
             _isShuffled = true;
         });
@@ -110,7 +111,6 @@ class _HomeState extends State<Home> {
         setState(() {
             _isSorting = false;
             _isShuffled = false;
-            _generateBars(); // regenerate the bars
         });
     }
 
