@@ -1,3 +1,5 @@
+import 'package:sorting_algorithm/algorithms/stalin.dart';
+
 import '../algorithms/bubble.dart';
 import '../algorithms/selection.dart';
 import '../algorithms/insertion.dart';
@@ -14,4 +16,5 @@ const Map<String, Stream<List<BarProp>> Function(List<BarProp>, int)> sortingAlg
     "Bogo": bogoSort,
     "Merge": mergeSort,
     "Quick": quickSort,
+    "Stalin": stalinSort,
 };
