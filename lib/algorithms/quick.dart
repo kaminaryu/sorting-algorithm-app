@@ -10,6 +10,9 @@ Stream<List<BarProp>> quickSort(List<BarProp> bars, int delay) async* {
 
 Stream<List<BarProp>> _quickSort(List<BarProp> localBars, int start, int end, int delay) async* {
     if (start >= end) {
+        if (start == end) {
+            yield [...localBars];
+        }
         return;
     }
 
@@ -49,6 +52,10 @@ Stream<List<BarProp>> _quickSort(List<BarProp> localBars, int start, int end, in
     final temp = localBars[smallestIndex];
     localBars[smallestIndex] = localBars[pivot];
     localBars[pivot] = temp;
+
+    // localBars[smallestIndex].color = AppTheme.special;
+    // yield [...localBars];
+    // await Future.delayed(Duration(microseconds: delay));
 
     yield* _quickSort(localBars, start, smallestIndex - 1, delay);
     yield* _quickSort(localBars, smallestIndex + 1, end, delay);
