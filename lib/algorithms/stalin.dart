@@ -12,17 +12,20 @@ Stream<List<BarProp>> stalinSort(List<BarProp> bars, int delay) async* {
         if (localBars[i].value > localBars[i + 1].value) {
             localBars[i + 1].color = AppTheme.swapping;
             yield [...localBars];
-            await Future.delayed(Duration(milliseconds: delay));
+            await Future.delayed(Duration(microseconds: delay));
 
+            localBars[i + 1].resetColor();
             localBars.removeAt(i + 1);
         }
         else {
             localBars[i + 1].color = AppTheme.comparison;
+
+            yield [...localBars];
+            await Future.delayed(Duration(microseconds: delay));
+
+            localBars[i].resetColor();
             i++;
         }
-        yield [...localBars];
-        await Future.delayed(Duration(milliseconds: delay));
  
-        localBars[i - 1].resetColor();
     }
 }
