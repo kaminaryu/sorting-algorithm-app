@@ -1,12 +1,12 @@
-// TODO : make better alg, add colors
+// NOTE: im not proud of this algorithm
 import '../class/bar_prop.dart';
 import '../data/theme.dart';
 
 Stream<List<BarProp>> mergeSort(List<BarProp> bars, int delay) async* {
     // make a local list to manipulate the list
     final localBars = bars.map((bar) => BarProp(value: bar.value)).toList();
-    
-    yield * _mergeSort(localBars, 0, localBars.length - 1, delay);
+ 
+    yield* _mergeSort(localBars, 0, localBars.length - 1, delay);
 }
 
 Stream<List<BarProp>> _mergeSort(List<BarProp> localBars, int start, int end, int delay) async* {
@@ -27,16 +27,23 @@ Stream<List<BarProp>> _merge(List<BarProp> localBars, int start, int middle, int
     List<BarProp> tempBars = localBars.sublist(start, end + 1);
 
     while (leftPointer <= middle - start && rightPointer < tempBars.length) {
+        int tempIndex = 0;
         if (tempBars[leftPointer].value < tempBars[rightPointer].value) {
             localBars[mainPointer] = tempBars[leftPointer];
+            tempIndex = leftPointer;
             localBars[mainPointer++].color = AppTheme.swapping;
             localBars[leftPointer++].color = AppTheme.swapping;
         }
         else if (tempBars[leftPointer].value > tempBars[rightPointer].value) {
-            localBars[mainPointer++] = tempBars[rightPointer++];
+            localBars[mainPointer] = tempBars[rightPointer];
+            tempIndex = rightPointer;
+            localBars[mainPointer++].color = AppTheme.swapping;
+            localBars[rightPointer++].color = AppTheme.swapping;
         }
         yield [...localBars];
         await Future.delayed(Duration(microseconds: delay));
+        localBars[mainPointer - 1].resetColor();
+        localBars[tempIndex].resetColor();
     }
 
     // emptying the leftovers
